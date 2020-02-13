@@ -353,18 +353,19 @@ class DirState(object):
             fmt = '{0}@{1}.json'
         if dt is None:
             dt = datetime.utcnow()
+            dt = dt.isoformat().replace(':','-')
         path = fmt.format(self._dir.path.strip('/').split('/')[-1],
-                          dt.isoformat())
+                          dt)
         path = os.path.join(base_path, path)
 
-        with open(path, 'wb') as f:
+        with open(path, 'w') as f:
             f.write(json.dumps(self.state))
 
         return path
 
     @classmethod
     def from_json(cls, path):
-        with open(path, 'rb') as f:
+        with open(path, 'r') as f:
             return cls(state=json.loads(f.read()))
 
 
